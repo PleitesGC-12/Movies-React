@@ -1,18 +1,21 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
 
   return (
-    <>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <main>
+      
+      <div className="wrapper">
+        
+        <header>
+          <img src="./hero.png" alt="Hero Banner"/>
+          <h1>Find <span className="text-gradient">Movies</span> You'll Enjoy Without the Hassle</h1>
+        </header>
 
-    </>
+      </div>
+    </main>
+   
   )
 }
 
