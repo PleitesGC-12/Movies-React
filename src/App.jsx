@@ -29,15 +29,19 @@ function App() {
   // loading state to show a spinner when the data is being fecthed
   const [isLoading, setIsLoading] = useState(false);
 
-  // to call the api
-  const fetchMovies = async () => {
+  // to determine which endpoint call from the API we pass query as a parameter
+  const fetchMovies = async (query = "") => {
     
+    // while the data is being fetched we can show the loading spinner
+    setIsLoading(true);
+    setErrorMessage('');
+
     try {
-      // while the data is being fetched we can show the loading spinner
-      setIsLoading(true);
-      setErrorMessage('');
       
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endpoint = query 
+      ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
+      
       const response = await fetch(endpoint, API_OPTIONS);
 
       if (!response.ok) {
@@ -66,8 +70,8 @@ function App() {
   }
 
   useEffect(() => {
-    fetchMovies();
-  } , [])
+    fetchMovies(searchTerm);
+  } , [searchTerm])
 
   return (
     <main>
