@@ -84,6 +84,7 @@ function App() {
 
   return (
     <main>
+      <div className="pattern"></div>
       
       <div className="wrapper">
         
