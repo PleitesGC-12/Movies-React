@@ -5,7 +5,7 @@ import './App.css'
 import Search from "./components/Search"
 import Spinner from "./components/Spinner"
 import MovieCard from "./components/MovieCard"
-import { updateSearchCount } from './appwrite'
+import { getTrendingMovies, updateSearchCount } from './appwrite'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -33,6 +33,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
   // Debounce the search term to prevent making too many API requests
   // by waiting for the user to stop typing for 500ms
@@ -82,10 +84,27 @@ function App() {
     }
   }
 
+  const loadTrendingMovies = async () => {
+    
+    try {
+      
+      const movies = await getTrendingMovies();
+      
+      setTrendingMovies(movies); // we need to create a useEffect to use it
+
+    } catch (error) {
+      console.error(`Error fetching trending movies`)
+    }
+  }
+
   // instead of passing the real searchTerm which gets updated on every single keystroke we pass a debouncedSearchTerm
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
   } , [debouncedSearchTerm])
+
+  useEffect(() => {
+    loadTrendingMovies()
+  }, [])
 
   return (
     <main>
@@ -104,6 +123,24 @@ function App() {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm}></Search>
         </header>
 
+        {trendingMovies.length > 0 && (
+          
+          <section className="trending">
+            <h2>Trending movies</h2>
+            
+            <ul>
+              {trendingMovies.map((movie,index) => (
+                <li key={movie.$id}>
+                  <p>{index + 1}</p>
+                  <img 
+                    src={movie.poster_url} 
+                    alt={movie.title} />
+                </li>
+              ))}
+            </ul>
+
+          </section>
+        )}
         <section className="all-movies">
           <h2>All Movies</h2>
 

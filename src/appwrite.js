@@ -43,6 +43,19 @@ export const updateSearchCount = async (searchTerm, movie) => {
     } catch(error) {
         console.error(error);
     }
-
-
 }
+
+// we need to create another appwrite function to be able to fetch the top movies from the database
+export const getTrendingMovies = async () => { // we don't need parameters because we are only fetching data
+    try {
+        const result = await database.listDocuments(DATABASE_ID, TABLE_ID, [
+            Query.limit(5),
+            Query.orderDesc("count") // sorted by count, those with highest count will appear on the start 
+        ])
+        
+        return result.documents;
+
+    } catch (error) {
+        console.log(error)
+    }  
+} 
